@@ -153,14 +153,14 @@ namespace AdaptiveLinearNeuron
                                         { calculateColored(clas3InputTwo), calculateNoColored(clas3InputTwo) },
                                         { calculateColored(clas3InputThree), calculateNoColored(clas3InputThree) }};*/
 
-            int[,] input = new int[,] { { jumpsXaxis(clas5InputOne), jumpsYaxis(clas5InputOne) }, 
+            int[,] input = new int[,] { { 12, 15 }, 
                                         { jumpsXaxis(clas5InputTwo), jumpsYaxis(clas5InputTwo) }, 
                                         { jumpsXaxis(clas5InputThree), jumpsYaxis(clas5InputThree) }, 
                                         { jumpsXaxis(clas5InputFour), jumpsYaxis(clas5InputFour) }, 
                                         { jumpsXaxis(clas5InputFive), jumpsYaxis(clas5InputFive) }, 
                                         { jumpsXaxis(clas5InputSix), jumpsYaxis(clas5InputSix) }, 
-                                        { jumpsXaxis(clas5InputSeven), jumpsYaxis(clas5InputSeven) },
-                                        { jumpsXaxis(clas5InputEight), jumpsYaxis(clas5InputEight) },
+                                        { 12, 15 },
+                                        { 10, 1 },
                                         { jumpsXaxis(clas1InputOne), jumpsYaxis(clas1InputOne) },
                                         { jumpsXaxis(clas1InputTwo), jumpsYaxis(clas1InputTwo) },
                                         { jumpsXaxis(clas1InputThree), jumpsYaxis(clas1InputThree) },
@@ -174,21 +174,22 @@ namespace AdaptiveLinearNeuron
             int[] outputs = { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             //Random r = new Random();
-            double randMax = 5;
-            double randMin = -5;
+            double randMax = 3;
+            double randMin = -3;
 
             //double[] weights = { r.NextDouble(), r.NextDouble(), r.NextDouble() };
-            double[] weights = { GetRandomNumber(randMin, randMax), GetRandomNumber(randMin, randMax), GetRandomNumber(randMin, randMax) };
+           // double[] weights = { GetRandomNumber(randMin, randMax), GetRandomNumber(randMin, randMax), GetRandomNumber(randMin, randMax) };
+            double[] weights = {1.5, 0.5,2};
 
             //Set specific learning Rate
-            double learningRate = 0.1;
+            double learningRate = 0.5;
             //Show Learning Rate in GUI
             textBox5.Text = learningRate.ToString();
             
 
 
             // Desired Error
-            double  desiredError = 0.9;
+            double  desiredError = 0.1;
             //Show Learning Rate in GUI
             textBox7.Text = desiredError.ToString();
 
@@ -219,7 +220,7 @@ namespace AdaptiveLinearNeuron
                 totalError = 0;
                 for (int i = 0; i < 16; i++)
                 {
-                    double sum = input[i, 0] * weights[0] + input[i, 1] * weights[1] + 1 * weights[2];
+                    double sum = input[i, 0] * weights[0] + input[i, 1] * weights[1] -weights[2];
 
                     //int output = calculateOutput(input[i, 0], input[i, 1], weights);
 
@@ -233,7 +234,7 @@ namespace AdaptiveLinearNeuron
                     //Weight Update for Sigmoid Adaline
                     weights[0] += learningRate * error * (sigmoid(sum) * (1 - sigmoid(sum))) * input[i, 0];
                     weights[1] += learningRate * error * (sigmoid(sum) * (1 - sigmoid(sum))) * input[i, 1];
-                    weights[2] += learningRate * error * (sigmoid(sum) * (1 - sigmoid(sum))) * 1;
+                    weights[2] += learningRate * error * (sigmoid(sum) * (1 - sigmoid(sum))) * -1;
 
                     totalError += ((Math.Pow(error, 2)) / 2);
                     //totalError += Math.Abs(error);
@@ -243,7 +244,7 @@ namespace AdaptiveLinearNeuron
                 //Chart for Error vs Epochs
                 this.chart2.Series["Error"].Points.AddXY(epoch, totalError);
 
-                if (epoch>100000)
+                if (epoch>200000)
                 {
                     MessageBox.Show("Too much Epochs");
                     break;
